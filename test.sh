@@ -1,24 +1,23 @@
 
 assert() {
-    expected="$1"
-    input="$2"
 
-    cc -o 9cc 9cc.c
-    ./9cc "$input" > tmp.s
+    input="$1"
+    expected="$2"
+
+    cc 9cc.c
+    ./a.out "$input" > tmp.s
     cc -o tmp tmp.s
-    ./tmp
-    actual="$?"
-    
-    if [ "$expected" = "$input" ]; then
-        echo "$input => $actual"
-    else
-        echo "$input => $expected expected, but got $actual"
-        exit 1 
-    fi
+    ./tmp 
 
+    actual="$?"
+
+    if [ "$expected" = "$actual" ]; then
+        echo "$input => $actual (OK)"
+    else
+        echo "expected $input => $expected. but got $actual"
+        exit 1
+    fi
 }
 
-assert 0 0
-assert 42 42
-echo OK 
-
+assert '10+5' 15 
+assert '5-5+10' 10 
